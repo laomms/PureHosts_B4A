@@ -27,12 +27,19 @@ public class MainActivity extends Activity {
     Button btnReadHost;
     Button btnWriteHost;
     EditText textHost;
-
+    public MainActivity activity;
     public static String path;
+	
+	public void onAttach(Activity activity){
+        this.activity = (MainActivity) activity;
+    }
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+		
+
         path = getFilesDir().getAbsolutePath();
         genHostFirst();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -130,7 +137,7 @@ public class MainActivity extends Activity {
     }
     public void startVPN()
     {
-        Intent intent = VpnService.prepare(this);
+        Intent intent = VpnService.prepare(getBaseContext());
         if (intent != null) {
             startActivityForResult(intent, 0);
         } else {

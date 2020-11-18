@@ -25,6 +25,7 @@ import anywheresoftware.b4a.BA.Permissions;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.view.LayoutInflater;
 
 
 
@@ -60,19 +61,31 @@ public class B4AWrapperClass extends AbsObjectWrapper<MainActivity> {
 	private static MainActivity cv;
 	private IOnActivityResult ion;
 	Intent intent;
+	Context context;
 	
 	public void Initialize(BA paramBA, String paramString) {
 	    eventName = paramString.toLowerCase(BA.cul);
+		BA.Log("eventName:" +eventName );
 	    ba = paramBA;
-
 	    MainActivity cv = new MainActivity();
 	    String str = paramString.toLowerCase(BA.cul);
-	
+	    BA.Log("str:" +str );
 	    setObject(cv);
 		intent = new Intent(BA.applicationContext, MainActivity.class);	
-	
+		BA.Log("intent:" +intent );
+        int resourceId = BA.applicationContext.getResources().getIdentifier("btnStart", "id", BA.packageName);
+        BA.Log("resourceId:" +resourceId );
 	}	
 
+    public Intent GetIntent()
+    {        
+        return intent;
+    }
+	
+	public void setContentView(BA pBA, String LayoutName){
+        pBA.activity.setContentView(BA.applicationContext.getResources().getIdentifier(LayoutName, "layout", BA.packageName));
+    }
+	
     public void startVPN() {
         getObject().startVPN();
     }
