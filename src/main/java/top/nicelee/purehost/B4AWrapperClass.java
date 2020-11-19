@@ -22,6 +22,7 @@ import anywheresoftware.b4a.BA.ActivityObject;
 import anywheresoftware.b4a.BA.Events;
 import anywheresoftware.b4a.IOnActivityResult;
 import anywheresoftware.b4a.BA.Permissions;
+import anywheresoftware.b4a.keywords.Bit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -73,8 +74,10 @@ public class B4AWrapperClass extends AbsObjectWrapper<MainActivity> {
 	    setObject(cv);
 		intent = new Intent(BA.applicationContext, MainActivity.class);	
 		BA.Log("intent:" +intent );
-        int resourceId = BA.applicationContext.getResources().getIdentifier("btnStart", "id", BA.packageName);
-        BA.Log("resourceId:" +resourceId );
+        int layoutId = BA.applicationContext.getResources().getIdentifier("activity_main", "layout", BA.packageName);
+        BA.Log("layoutId_activity_main:" +Bit.ToHexString(layoutId) );
+		LocalVpnService Instance=new LocalVpnService();
+		LocalVpnService.Instance=Instance;
 	}	
 
     public Intent GetIntent()
@@ -82,41 +85,18 @@ public class B4AWrapperClass extends AbsObjectWrapper<MainActivity> {
         return intent;
     }
 	
+	public void SetConfigFilePath(String FilePath)
+    {
+        MainActivity.path= FilePath;
+    }
+	
+    public Intent GetVpnServiceIntent()
+    {
+        return  VpnService.prepare(BA.applicationContext);
+    }
+	
 	public void setContentView(BA pBA, String LayoutName){
         pBA.activity.setContentView(BA.applicationContext.getResources().getIdentifier(LayoutName, "layout", BA.packageName));
-    }
-	
-    public void startVPN() {
-        getObject().startVPN();
-    }
-	
-	public void stopVPN() {
-        getObject().stopVPN();
-    }
-	
-    public void genHostFirst() {
-        getObject().genHostFirst();
-    }
-	
-	public void startVService() {
-        ion = new IOnActivityResult() {
+    }	
 
-            @Override
-            public void ResultArrived(int arg0, Intent data) {
-                BA.Log("ResultArrived");
-                if (data != null) {
-                    String text = data.getStringExtra(MainActivity.INPUT_SERVICE);
-                    BA.Log("Text read: " + text);
-                    if (B4AWrapperClass.ba.subExists(B4AWrapperClass.eventName + "_scanned_text")) {
-                        B4AWrapperClass.ba.raiseEventFromDifferentThread(this, null, 0, B4AWrapperClass.eventName + "_SetHosts", true, new Object[] {text});
-                    }
-
-                } else {
-                    //statusMessage.setText(R.string.ocr_failure);
-                    BA.Log("No Text captured, intent data is null");
-                }
-            }
-        };
-        ba.startActivityForResult(ion, intent);
-    }
 }
