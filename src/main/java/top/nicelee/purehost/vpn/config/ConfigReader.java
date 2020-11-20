@@ -30,7 +30,7 @@ public class ConfigReader {
 	final static Pattern patternConfig = Pattern.compile("^[ ]*([0-9]+.[0-9]+.[0-9]+.[0-9]+) ([^ ]+.*$)");
 	final static Pattern patternDNS = Pattern.compile(":[ ]*\\[([0-9]+.[0-9]+.[0-9]+.[0-9]+)\\]");
 	final public static Pattern patternRootDomain = Pattern.compile("([^\\.]+\\.[^\\.]+)$");
-  
+
     public static HashMap<String, String>  domainIpMap = new HashMap<>();
 	public static HashMap<String, String>  rootDomainIpMap = new HashMap<>();
 	public static List<String> dnsList = new ArrayList<String>();
@@ -53,7 +53,7 @@ public class ConfigReader {
 			dnsList.add("114.114.114.114");
 		}
 		for(String dns : dnsList){
-			System.out.println("DNS server:" + dns);
+			System.out.println("DNS Server: " + dns);
 		}
 		return dnsList;
 
@@ -141,7 +141,6 @@ public class ConfigReader {
 			}
 		}
 	}
-
 	public static void initHost() {
 		BufferedWriter buWriter = null;
 		try {
@@ -161,8 +160,7 @@ public class ConfigReader {
 			}
 		}
 	}
-	public static void readHost(EditText textHost) {
-		
+	public static void readHost( EditText textHost) {
 		BufferedReader buReader = null;
 		System.out.println("----Config init begin...----");
 		try {
@@ -180,7 +178,6 @@ public class ConfigReader {
 					//System.setProperty(matcher.group(1), matcher.group(2).trim());
 					if(matcher.group(2).startsWith("*.")){
 						rootDomainIpMap.put(matcher.group(2).replace("*.","") ,matcher.group(1).trim());
-						
 					}else{
 						domainIpMap.put(matcher.group(2), matcher.group(1).trim());
 					}
@@ -197,5 +194,78 @@ public class ConfigReader {
 			}
 		}
 		System.out.println("----Config ini end...----");
+	}
+
+	public static void initHosts(String ConfigPath) {
+		BufferedWriter buWriter = null;
+		try {
+			File folder = new File(ConfigPath);
+			File file = new File(folder, "host");
+			//System.out.println(ConfigPath);
+			buWriter = new BufferedWriter(new FileWriter(file, false));
+			buWriter.write("#127.0.0.1 localhost\r\n");
+			buWriter.write("23.101.130.247 microsoft.gointeract.io\r\n");
+			buWriter.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			try {
+				buWriter.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+	public static void writeHosts(String str,String ConfigPath) {
+		BufferedWriter buWriter = null;
+		try {
+			File folder = new File(ConfigPath);
+			File file = new File(folder, "host");
+			//System.out.println(ConfigPath);
+			buWriter = new BufferedWriter(new FileWriter(file, false));
+			buWriter.write(str);
+			buWriter.flush();
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			try {
+				buWriter.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+	public static String readHosts(String ConfigPath) {
+		String HostsCotent="";
+		BufferedReader buReader = null;
+		System.out.println("----Config init begin...----");
+		try {
+			File folder = new File(ConfigPath);
+			File file = new File(folder, "host");
+			buReader = new BufferedReader(new FileReader(file));
+			String config;
+			while ((config = buReader.readLine()) != null) {
+				HostsCotent=HostsCotent+config +"\r\n";
+				//System.out.println(config);
+				Matcher matcher = patternConfig.matcher(config);
+				if (matcher.find()) {
+					//System.setProperty(matcher.group(1), matcher.group(2).trim());
+					if(matcher.group(2).startsWith("*.")){
+						rootDomainIpMap.put(matcher.group(2).replace("*.","") ,matcher.group(1).trim());
+					}else{
+						domainIpMap.put(matcher.group(2), matcher.group(1).trim());
+					}
+
+					System.out.printf("  key-->value:  %s --> %s\r\n", matcher.group(2), matcher.group(1));
+				}
+			}
+		} catch (IOException e) {
+			// e.printStackTrace();
+		} finally {
+			try {
+				buReader.close();
+			} catch (Exception e) {
+			}
+		}
+		System.out.println("----Config ini end...----");
+		return  HostsCotent;
 	}
 }

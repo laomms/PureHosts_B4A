@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 		
 
-        path = getFilesDir().getAbsolutePath();
+        //path = getFilesDir().getAbsolutePath();
         genHostFirst();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -98,7 +98,7 @@ public class MainActivity extends Activity {
         btnReadHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfigReader.readHost(textHost);
+                //ConfigReader.readHost(textHost);
                 Toast.makeText(MainActivity.this, "Host reading is complete!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
         btnWriteHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfigReader.writeHost(textHost);
+                //ConfigReader.writeHost(textHost);
                 Toast.makeText(MainActivity.this, "Host writing is complete!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
 
 
         //ConfigReader.writeHost();
-        ConfigReader.readHost(textHost);
+        //ConfigReader.readHost(textHost);
        // ConfigReader.initDNS(this);
         //TextView txtHeader = findViewById(R.id.textMySite);
         //txtHeader.setFocusable(true);
